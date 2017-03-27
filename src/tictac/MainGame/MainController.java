@@ -68,6 +68,8 @@ public class MainController {
         for (Label l:list){
             setListener(l);
         }
+        user_score_one.setText(player1.getPlayername()+": "+String.valueOf(score_one));
+        user_score_two.setText(player2.getPlayername()+": "+String.valueOf(score_two));
     }
 
 
@@ -163,18 +165,22 @@ public class MainController {
 
     }
 
-    public void setScores(String name, int score){
-        user_score_one.setText(name+": "+String.valueOf(score));
-    }
+//    public void setScores(String name, int score){
+//        user_score_one.setText(name+": "+String.valueOf(score));
+//    }
 
     public void checkplayer(String name){
         if (name.equals(player1.getPlayername())){
             score_one+=1;
-            setScores(name,score_one);
+            user_score_one.setText(name+": "+String.valueOf(score_one));
+            user_score_two.setText(player2.getPlayername()+": "+String.valueOf(score_two));
+//            setScores(name,score_one);
         }
         else if (name.equals(player2.getPlayername())){
             score_two+=1;
-            setScores(name,score_two);
+            user_score_one.setText(player1.getPlayername()+": "+String.valueOf(score_one));
+            user_score_two.setText(name+": "+String.valueOf(score_two));
+//            setScores(name,score_two);
         }
     }
 
