@@ -23,20 +23,25 @@ public class MainController {
     @FXML Label user_score_one;
     @FXML Label user_score_two;
 
-    int score_one;
-    int score_two;
+    private int score_one;
+    private int score_two;
+    private int total=0;
 
     private Player player1;
     private Player player2;
 
     static String player1_name;
     static String player2_name;
-    String name;
-    String playerset;
-    int player1plays=0;
-    int player2plays=0;
 
-    ArrayList<Label>list;
+    private String name;
+    private String playerset;
+
+    private int player1plays=0;
+    private int player2plays=0;
+
+    private ArrayList<Label>list;
+
+    private boolean winner=false;
 
     public void setPlayer1_name(String player1_name) {
         this.player1_name = player1_name;
@@ -73,13 +78,13 @@ public class MainController {
     }
 
 
-    public void setListener(Label label){
+    private void setListener(Label label){
         String text=label.getText();
         label.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
                 if (!label.getText().isEmpty()){
-                    System.out.println("Spot taken!");
+//                    System.out.println("Spot taken!");
                 }
                 else if (text.isEmpty()){
                         if(player1plays==0){
@@ -96,67 +101,76 @@ public class MainController {
 
                         setValue(label, playerset);
                         checkwinner(playerset,name);
+                        isDraw();
 //                    System.out.println(name);
                 }
             }
         });
     }
 
-    public void setValue(Label label, String playerset){
+    private void setValue(Label label, String playerset){
         label.setText(playerset);
     }
 
 
-    public void player1_turn(){
+    private void player1_turn(){
         name=player1.getPlayername();
         playerset=player1.getPlayerset();
         player1plays+=1;
     }
 
-    public void player2_turn(){
+    private void player2_turn(){
         name=player2.getPlayername();
         playerset=player2.getPlayerset();
         player2plays+=1;
     }
 
 
-    public void checkwinner(String XorO, String name){
+    private void checkwinner(String XorO, String name){
         if(top_left.getText().equals(XorO)&&top_center.getText().equals(XorO)&&top_right.getText().equals(XorO)){
+            winner=true;
             alertbox(name.toUpperCase()+" WINS!");
             checkplayer(name);
             newGame();
         }
         if(left.getText().equals(XorO)&&center.getText().equals(XorO)&&right.getText().equals(XorO)){
+            winner=true;
             alertbox(name.toUpperCase()+" WINS!");
             checkplayer(name);
             newGame();
         }
         if(bottom_left.getText().equals(XorO)&&bottom_center.getText().equals(XorO)&&bottom_right.getText().equals(XorO)){
+            winner=true;
             alertbox(name.toUpperCase()+" WINS!");
             checkplayer(name);
             newGame();
         }
         if(top_left.getText().equals(XorO)&&left.getText().equals(XorO)&&bottom_left.getText().equals(XorO)){
+            winner=true;
             alertbox(name.toUpperCase()+" WINS!");
             checkplayer(name);
             newGame();
         }
         if(top_center.getText().equals(XorO)&&center.getText().equals(XorO)&&bottom_center.getText().equals(XorO)){
+            winner=true;
             alertbox(name.toUpperCase()+" WINS!");
             checkplayer(name);
             newGame();
         }
         if(top_right.getText().equals(XorO)&&right.getText().equals(XorO)&&bottom_right.getText().equals(XorO)){
+            winner=true;
             alertbox(name.toUpperCase()+" WINS!");
             checkplayer(name);
             newGame();
         }
         if(top_left.getText().equals(XorO)&&center.getText().equals(XorO)&&bottom_right.getText().equals(XorO)){
+            winner=true;
             alertbox(name.toUpperCase()+" WINS!");
             checkplayer(name);
             newGame();
         }
         if(top_right.getText().equals(XorO)&&center.getText().equals(XorO)&&bottom_left.getText().equals(XorO)){
+            winner=true;
             alertbox(name.toUpperCase()+" WINS!");
             checkplayer(name);
             newGame();
@@ -165,11 +179,24 @@ public class MainController {
 
     }
 
-//    public void setScores(String name, int score){
-//        user_score_one.setText(name+": "+String.valueOf(score));
-//    }
+    private void isDraw(){
+        total=0;
+        for (Label l:list){
+            if (!l.getText().toString().isEmpty()){
+                total+=1;
+                if (total==9&&winner==false){
+                    alertbox("Its a Draw");
+                    newGame();
+                    total=0;
+                }
+            }
+        }
 
-    public void checkplayer(String name){
+
+    }
+
+
+    private void checkplayer(String name){
         if (name.equals(player1.getPlayername())){
             score_one+=1;
             user_score_one.setText(name+": "+String.valueOf(score_one));
@@ -184,13 +211,14 @@ public class MainController {
         }
     }
 
-    public void newGame(){
+    private void newGame(){
         for (Label l:list){
             l.setText("");
         }
+        winner=false;
     }
 
-    public void alertbox(String message){
+    private void alertbox(String message){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("TicTac");
         alert.setHeaderText(null);
